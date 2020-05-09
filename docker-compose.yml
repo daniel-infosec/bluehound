@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+
+  # Initial cluster member
+  neo4j_db:
+    build: ./context
+    image: neo4j-db:latest
+    entrypoint: "powershell C:/neo4j/docker-entrypoint.ps1"
+    networks:
+      neo4jcluster:
+        ipv4_address: "172.28.64.2"
+
+  data_collector:
+    build: ./context
+    image: data-collector:latest
+    networks:
+      neo4jcluster:
+        ipv4_address: "172.28.64.3"
+
+# Externally defined transparent network
+networks:
+  neo4jcluster:
+    external:
+      name: nat
