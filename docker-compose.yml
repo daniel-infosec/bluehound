@@ -9,17 +9,30 @@ services:
     entrypoint: "powershell C:/neo4j/docker-entrypoint.ps1"
     networks:
       neo4jcluster:
-        ipv4_address: "172.28.64.2"
+        #ipv4_address: "172.28.64.2"
 
   data_collector:
     build: ./context
     image: data-collector:latest
     networks:
       neo4jcluster:
-        ipv4_address: "172.28.64.3"
+        #ipv4_address: "172.28.64.3"
 
-# Externally defined transparent network
+  jupyter-bloodhound:
+    image: jupyter-bloodhound:latest
+    ports:
+      - "8888:8888"
+    restart: always
+    networks:
+      neo4jcluster:
+        #ipv4_address: "172.28.64.4"
+
 networks:
   neo4jcluster:
-    external:
-      name: nat
+    driver: nat
+
+# Externally defined transparent network
+#networks:
+#  neo4jcluster:
+#    external:
+#      name: bridge
