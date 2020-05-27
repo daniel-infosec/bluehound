@@ -9,7 +9,20 @@ $ErrorActionPreference = 'Stop'
 # Stop neo4j if it's already running
 stop-service neo4j
 
-C:\neo4j\bin\neo4j-admin.bat set-initial-password tootiefrutie
+$a = get-content "C:\\config\\config.toml"
+$password = ''
+foreach($line in $a)
+{
+    if ($line -like '*=*') 
+    {
+        $k = [regex]::split($line,'=')
+        if($k[0] -like '*password*') {
+            $password = $k[1].trim().replace("'","")
+        }
+    }
+}
+
+C:\neo4j\bin\neo4j-admin.bat set-initial-password $password
 
 # Example docker entrypoint from Neo4j
 # https://github.com/neo4j/docker-neo4j-publish/blob/56ac90c26a96f570ba8090c37b8dfcd613fd537f/3.0.7/enterprise/docker-entrypoint.sh
@@ -75,7 +88,7 @@ if ($Command -eq 'neo4j') {
 #*****************************************************************
 
 # The name of the database to mount
-#dbms.active_database=graph.db
+dbms.default_database=bloodhoundexampledb.graphdb
 
 # Paths of directories in the installation.
 #dbms.directories.data=data

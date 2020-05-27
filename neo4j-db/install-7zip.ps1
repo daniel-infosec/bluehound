@@ -1,7 +1,7 @@
 $7Zip = $true;
 $WebClient = New-Object -TypeName System.Net.WebClient;
 $7ZipUrl = "http://downloads.sourceforge.net/sevenzip/7z920-x64.msi";
-$7ZipInstaller = "$env:TEMP\7z920-x64.msi";
+$7ZipInstaller = "C:\\7z920-x64.msi";
  
  
 try {
@@ -18,7 +18,6 @@ $7Zip = $false;
  
  
 if (!$7Zip) {
-	$WebClient.DownloadFile($7ZipUrl,$7ZipInstaller);
 	Start-Process -Wait -FilePath $7ZipInstaller;
 	Remove-Item -Path $7ZipInstaller -Force -ErrorAction SilentlyContinue;
 }

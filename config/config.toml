@@ -1,0 +1,8 @@
+# Config for neo4j DB
+
+title = "Neo4J DB Config"
+
+[database]
+server = "neo4j_db"
+username = "neo4j"
+password = "tootiefrutie"

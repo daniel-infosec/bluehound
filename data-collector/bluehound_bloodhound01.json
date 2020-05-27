@@ -1,0 +1,25 @@
+{
+    "CmsPlugins":  [
+                       "ActiveDirectory"
+                   ],
+    "DomainJoinConfig":  {
+                             "Sid":  "S-1-5-21-1049318781-62561770-3964567461",
+                             "MachineAccountName":  "bloodhound01",
+                             "Guid":  "06fcaaa3-00b9-4104-a84f-001c9bfe5f7b",
+                             "DnsTreeName":  "bluehound.local",
+                             "DnsName":  "bluehound.local",
+                             "NetBiosName":  "BLUEHOUND"
+                         },
+    "ActiveDirectoryConfig":  {
+                                  "GroupManagedServiceAccounts":  [
+                                                                      {
+                                                                          "Name":  "bloodhound01",
+                                                                          "Scope":  "bluehound.local"
+                                                                      },
+                                                                      {
+                                                                          "Name":  "bloodhound01",
+                                                                          "Scope":  "BLUEHOUND"
+                                                                      }
+                                                                  ]
+                              }
+}

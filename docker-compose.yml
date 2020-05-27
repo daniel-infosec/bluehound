@@ -4,35 +4,38 @@ services:
 
   # Initial cluster member
   neo4j_db:
-    build: ./context
+    build: ./neo4j-db
     image: neo4j-db:latest
-    entrypoint: "powershell C:/neo4j/docker-entrypoint.ps1"
-    networks:
-      neo4jcluster:
-        #ipv4_address: "172.28.64.2"
+    volumes:
+      - ./neo4j-db:C:/neo4j-db
+      - ./config:C:/config
+    #entrypoint: "powershell C:/neo4j/docker-entrypoint.ps1"
+    ports:
+      - "7474:7474"
+      - "7473:7473"
+      - "7687:7687"
+      - "1337:1337"
 
-  data_collector:
-    build: ./context
+  bloodhound01:
+    build: ./data-collector
     image: data-collector:latest
-    networks:
-      neo4jcluster:
-        #ipv4_address: "172.28.64.3"
+    entrypoint: node c:\\data-collector\\dataingestor.js
+    hostname: containerhost
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "neo4j_db"
+    volumes:
+      - ".\\data-collector:C:\\data-collector"
+      - ".\\config:C:\\config"
+    security_opt:
+      - credentialspec=file://wi.json
 
-  jupyter-bloodhound:
+  jupyter_bloodhound:
+    build: ./jupyter-bloodhound
     image: jupyter-bloodhound:latest
     ports:
       - "8888:8888"
+    volumes:
+      - ".\\config:C:\\config"
     restart: always
-    networks:
-      neo4jcluster:
-        #ipv4_address: "172.28.64.4"
-
-networks:
-  neo4jcluster:
-    driver: nat
-
-# Externally defined transparent network
-#networks:
-#  neo4jcluster:
-#    external:
-#      name: bridge

@@ -25,6 +25,6 @@ RUN pip3 install jupyter \
 WORKDIR C:\\notebooks
 
 #ENTRYPOINT ["cmd.exe", "jupyter notebook"]
-CMD ["cmd.exe", "/s", "/c", "jupyter notebook --ip=*"]
+ENTRYPOINT ["cmd.exe", "/s", "/c", "jupyter notebook --ip=*"]
 
 EXPOSE 8888
