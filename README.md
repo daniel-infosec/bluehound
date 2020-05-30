@@ -1,5 +1,7 @@
 # BloodHound in a Box
 
+**This is in beta. There's probably still a lot of bugs.**
+
 ## Problem Statement
 
 Red Teams and potentially attackers are using BloodHound asymmetrically to the supposed advantage it provides to Blue Team organizations. In my experience, this is due to the limited resources and knowledge of Blue Teams who treat Red Team tooling as contraband. To share the blame, Red Teams often say "just run BloodHound" without providing the training or resource necessary to make it easy for Blue Teams. This project aims to solve those problems by accomplishing the following.
@@ -26,3 +28,10 @@ I'm a big fan of @Cyb3rWard0g's ues of Jupyter notebooks for analysis. They're a
 https://medium.com/threat-hunters-forge/jupyter-notebooks-for-bloodhound-analytics-and-alternative-visualizations-9543c2df576a
 
 You can access the Jupyter notebook server by going to the URL provided in the docker-compose output.
+
+## Future Work
+
+* On first run, store all attack paths to DA and then generate alerts for new attack paths added
+* Add more nifty jupyter notebooks for analysis
+* Provide support for deploying this app in Azure
+* Provide support for running this project with vagrant instead of docker-compose
