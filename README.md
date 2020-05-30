@@ -16,10 +16,32 @@ Red Teams and potentially attackers are using BloodHound asymmetrically to the s
 1. Clone this project to a Domain joined Windows 2019 server (2016 support coming soon).
 2. Copy the DCSetup script to a Domain Controller, update the script with the hostname of the server you'll be running BloodHound from, and run it.
 3. Run the ServerSetup.ps1 script. (This will force the server to reboot.)
-4. Run dc-redo.ps1 script.
-5. Download the latest BloodHound release on the target server and run it. Once the dc-redo script is done, you can login to BloodHound using "neo4j" as the username and "obiwankenobi" as the default password. These are customizable in the .\config\config.toml file.
+4. Run StartContainers.ps1 script.
+5. Download the latest BloodHound release on the target server and run it. Once the StartContainers script is done, you can login to BloodHound using "neo4j" as the username and "obiwankenobi" as the default password. These are customizable in the .\config\config.toml file.
 
 That's it. The server will now be automatically collecting data.
+
+## The Setup Scripts
+
+### DCSetup
+
+I know a lot of people are scared about running random code on their Domain Controllers. I tried my best to make this as simpel as possible and I copy-pasted the code and best practices from Microsoft. https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/manage-serviceaccounts.
+
+Feel free to review the DCSetup script and compare.
+
+### ServerSetup
+
+The server setup script does the following:
+
+* Installs Docker
+* Installs Docker-compose
+* Setups a transparent docker network interface so the containers can communicate with the Domain
+
+## Frequency
+
+By default, the project will collect information every 1 hour. If you pop into https://github.com/daniel-infosec/bluehound/blob/master/config/config.toml, you can customize the collection frequency. It uses cron syntax.
+
+https://crontab.guru/
 
 ## Jupyter Notebooks
 
@@ -34,4 +56,5 @@ You can access the Jupyter notebook server by going to the URL provided in the d
 * On first run, store all attack paths to DA and then generate alerts for new attack paths added
 * Add more nifty jupyter notebooks for analysis
 * Provide support for deploying this app in Azure
+* Make the output from the containers more user friendly
 * Provide support for running this project with vagrant instead of docker-compose
