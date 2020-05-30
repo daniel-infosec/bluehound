@@ -13,6 +13,7 @@ var NewIngestion = require('./newingestion.js');
 var toml = require('toml');
 var http = require('http');
 const { exec } = require("child_process");
+const Shell = require('node-powershell');
 
 String.prototype.format = function() {
     var i = 0,
@@ -71,10 +72,6 @@ if (!Array.prototype.last) {
 
 function fileDrop(filePath, fileName) {
     let fileNames = [];
-    //console.log(e)
-    //e.each(e.dataTransfer.files, function (_, file) {
-    //    fileNames.push({ path: file.path, name: file.name });
-    //});
 
     var ASYNC = require('async');
 
@@ -105,7 +102,7 @@ function fileDrop(filePath, fileName) {
             }
         );
     });
-    exit(0);
+    return;
 }
 
 async function addBaseProps() {
@@ -332,8 +329,9 @@ async function uploadData(chunk, type, version) {
             await session
                 .run(statement, { props: arr[i] })
                 .catch(function (error) {
-                    console.log(statement);
-                    console.log(data[key].props);
+                    //console.log(statement);
+                    //console.log(data[key].props);
+                    console.log("Error on line 334");
                     console.log(error);
                 });
         }
@@ -372,8 +370,6 @@ const checkDatabaseExists = () => {
         .catch(error => {
             if (error.message.includes('WebSocket connection failure')) {
                 console.log("No database found")
-            } else if (error.code.includes('Unauthorized')) {
-                console.log("Unauthorized")
             } else {
                 console.log("Error message")
                 console.log(error.message)
@@ -381,51 +377,106 @@ const checkDatabaseExists = () => {
         })
         .finally(() => {
             session.close();
-            driver.close();
+            //driver.close();
+            console.log("Session closed")
         });
 };
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function getFile(timeout) {
+    const timeouts = setInterval(function() {
+
+        //const fileExists = fs.existsSync(file);
+
+        var files = FS.readdirSync('C:/').filter(fn => fn.endsWith('.zip')).filter(fn => fn.startsWith(count));
+
+        console.log(files)
+
+        //console.log('Checking for: ', file);
+       //console.log('Exists: ', fileExists);
+
+        if (files.length != 0 && fs.statSync(files).size > 0) {
+            clearInterval(timeouts);
+            checkDatabaseExists();
+            fileDrop('C:\\' + files[0], files[0])
+            count = count + 1;
+            files = [];
+            return;
+        }
+    }, timeout);
+};
+
 function collectData() {
-    
-    exec("C:\\bloodhound\\ingestors\\sharphound.exe --collectionmethod all --outputdirectory c:\\", (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
+    const ps = new Shell({
+      executionPolicy: 'Bypass',
+      noProfile: true
     });
+     
+    ps.addCommand('import-module c:\\BloodHound\\Ingestors\\SharpHound.ps1; invoke-bloodhound -collectionmethod all -outputdirectory c:\\ -outputprefix ' + count);
+    var BHOutput = ""
+    ps.invoke()
+    .then(output => {
+      console.log("BloodHound collection in progress");
+      BHOutput = output;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+    getFile(3000)
 
     return;
 
-    for (let j = 0; j < process.argv.length; j++) {
-        console.log(j + ' -> ' + (process.argv[j]));
-    }
-    let fileName = process.argv[process.argv.length-1]
+    //for (let j = 0; j < process.argv.length; j++) {
+    //    console.log(j + ' -> ' + (process.argv[j]));
+   // }
+   // let fileName = process.argv[process.argv.length-1]
 
-    console.log(fileName)
-    checkDatabaseExists();
-    fileDrop(process.cwd() + '\\' + fileName, fileName)
+    //console.log(fileName)
+    //checkDatabaseExists();
+    //fileDrop(process.cwd() + '\\' + fileName, fileName)
 }
 
+exec("powershell.exe ipconfig /renew", (error, stdout, stderr) => {
+    if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+    console.log(`stdout: ${stdout}`);
+});
 
 const config = toml.parse(FS.readFileSync("C:\\config\\config.toml", 'utf-8'));
-const url = config['database']['server'];
+var url = config['database']['server'];
 const username = config['database']['username'];
 const password = config['database']['password'];
+const schedule = config['collection_frequency']['schedule'];
+var count = 1;
 var driver;
+
+var cron = require('node-cron');
+
+cron.schedule(schedule, () => {
+  console.log('Initiating scheduled data collection');
+  collectData();
+});
 
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});  
       
     var url = req.url; 
       
-    if(url ==='/about') { 
-        res.write('Initiating data collection');
-        console.log('Initiating data collection');
+    if(url ==='/manual') { 
+        res.write('Initiating manual data collection');
+        console.log('Initiating manual data collection');
         collectData();
         res.end();  
     }  

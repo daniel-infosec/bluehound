@@ -16,11 +16,13 @@ services:
       - "7687:7687"
       - "1337:1337"
 
-  bloodhound01:
+
+  data_collector:
     build: ./data-collector
     image: data-collector:latest
-    entrypoint: node c:\\data-collector\\dataingestor.js
-    hostname: containerhost
+    entrypoint: c:\\nodejs\\node.exe c:\\data-collector\\dataingestor.js
+    #entrypoint: ping -t localhost
+    hostname: bloodhound02
     ports:
       - "8080:8080"
     depends_on:
@@ -29,7 +31,14 @@ services:
       - ".\\data-collector:C:\\data-collector"
       - ".\\config:C:\\config"
     security_opt:
-      - credentialspec=file://wi.json
+      - credentialspec=file://bluehound_bloodhound02.json
+    dns:
+      - "192.168.43.2"
+      - "8.8.8.8"
+    user: "NT AUTHORITY\\SYSTEM"
+    networks:
+      - default
+      - domain
 
   jupyter_bloodhound:
     build: ./jupyter-bloodhound
@@ -39,3 +48,8 @@ services:
     volumes:
       - ".\\config:C:\\config"
     restart: always
+
+networks:
+  domain:
+    external:
+      name: "BHNet"

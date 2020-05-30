@@ -7,6 +7,20 @@ Param
 $ErrorActionPreference = 'Stop'
 
 # Stop neo4j if it's already running
+$ServiceName = 'neo4j'
+$arrService = Get-Service -Name $ServiceName
+while ($arrService.Status -eq 'Running')
+{
+
+    Stop-Service $ServiceName
+    Start-Sleep -seconds 5
+    $arrService.Refresh()
+    if ($arrService.Status -ne 'Running')
+    {
+        Write-Host 'Service has stopped'
+    }
+
+}
 stop-service neo4j
 
 $a = get-content "C:\\config\\config.toml"

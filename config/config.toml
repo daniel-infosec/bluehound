@@ -3,6 +3,10 @@
 title = "Neo4J DB Config"
 
 [database]
-server = "neo4j_db"
+server = "replacedbysetupscript"
 username = "neo4j"
-password = "tootiefrutie"
+password = "obiwankenobi"
+
+[collection_frequency]
+schedule = "5 * * * *"
+
