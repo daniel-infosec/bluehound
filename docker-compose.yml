@@ -31,7 +31,7 @@ services:
       - ".\\data-collector:C:\\data-collector"
       - ".\\config:C:\\config"
     security_opt:
-      - credentialspec=file://bluehound_bloodhound02.json
+      - credentialspec=file://bluehound_bloodhound01.json
     dns:
       - "192.168.43.2"
       - "8.8.8.8"

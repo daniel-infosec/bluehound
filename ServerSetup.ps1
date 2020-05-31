@@ -7,7 +7,9 @@ Param (
 	[string]$dockerUser
 )
 
-$scriptName = 'installDocker.ps1'
+import-module activedirectory
+
+$scriptName = 'ServerSetup.ps1'
 cmd /c "exit 0"
 
 # Use executeReinstall to support reinstalling, use executeExpression to trap all errors ($LASTEXITCODE is global)
@@ -170,9 +172,6 @@ if ($dockerUser) {
 Write-Host "`n[$scriptName] ---------- stop ----------`n"
 $error.clear()
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\Docker\docker-compose.exe
-
 try {
 	if (not (Test-ADServiceAccount bloodhound01)) {
 		Write-Host "Server has not been authorized to use bloodhound01 service account. Please double check that the DCSetup.ps1 script has been ran succesfully and that this server is in the correct group to use the gMSA."
@@ -184,23 +183,6 @@ try {
 $configPath = $PSScriptRoot + "\config\config.toml"
 $myFQDN=(Get-WmiObject win32_computersystem).DNSHostName+"."+(Get-WmiObject win32_computersystem).Domain
 ((get-content -path $configPath -raw) -replace 'replacedbysetupscript',$myFQDN) | set-content -path $configPath
-
-# Setup docker network
-$profiles = get-netconnectionprofile -networkcategory DomainAuthenticated
-$domainProfile = $null
-$inList = $null
-while($inList -eq $null) {
-    write-host "The following domain profiles have been identified: "
-    write-host ($profiles.InterfaceAlias -join "`r`n")
-    $NIC = read-host "Please enter the name of the profile you would like Docker to use to setup a virtual NIC"
-    $inList = $profiles | where-object {$_.InterfaceAlias -eq $NIC}
-    if ($inList -eq $null) {
-        write-host "You did not enter a valid NIC profile. Please check your spelling and try again."
-    } else {
-    	$domainProfile = $NIC
-    }
-}
-docker network create -d transparent -o com.docker.network.windowsshim.interface="$domainProfile" BHNet
 
 if ($restart -eq 'yes') {
 	executeExpression "shutdown /r /t 10"

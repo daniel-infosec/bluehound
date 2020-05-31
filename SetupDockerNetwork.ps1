@@ -14,3 +14,8 @@ while($inList -eq $null) {
     }
 }
 docker network create -d transparent -o com.docker.network.windowsshim.interface="$domainProfile" BHNet
+
+# Create Credential Spec
+Import-Module ActiveDirectory
+Install-Module CredentialSpec
+New-CredentialSpec -AccountName Bloodhound01

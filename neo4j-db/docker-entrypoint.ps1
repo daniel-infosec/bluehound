@@ -21,7 +21,11 @@ while ($arrService.Status -eq 'Running')
     }
 
 }
-stop-service neo4j
+try{
+    stop-service neo4j
+} catch {
+    Write-Host 'Neo4j service was not running.'
+}
 
 $a = get-content "C:\\config\\config.toml"
 $password = ''
