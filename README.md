@@ -44,7 +44,7 @@ The server setup script does the following:
 
 By default, the project will collect information every 1 hour. If you pop into https://github.com/daniel-infosec/bluehound/blob/master/config/config.toml, you can customize the collection frequency. It uses cron syntax.
 
-https://crontab.guru/
+https://github.com/kelektiv/node-cron/tree/master/examples
 
 ## Jupyter Notebooks
 
