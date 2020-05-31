@@ -354,8 +354,6 @@ const checkDatabaseExists = () => {
         tempUrl = `bolt://${tempUrl}`;
     }
 
-    var username ='neo4j'
-    var password = 'tootiefrutie'
     console.log(tempUrl)
 
     driver = neo4j.driver(tempUrl, neo4j.auth.basic(username, password));
@@ -365,7 +363,7 @@ const checkDatabaseExists = () => {
         .run('MATCH (n) RETURN n LIMIT 1')
         .then(result => {
             console.log("Successful database connection")
-            url = tempUrl;
+            //url = tempUrl;
         })
         .catch(error => {
             if (error.message.includes('WebSocket connection failure')) {
@@ -395,12 +393,12 @@ function getFile(timeout) {
 
         var files = FS.readdirSync('C:/').filter(fn => fn.endsWith('.zip')).filter(fn => fn.startsWith(count));
 
-        console.log(files)
+        //console.log(files)
 
         //console.log('Checking for: ', file);
        //console.log('Exists: ', fileExists);
 
-        if (files.length != 0 && FS.statSync(files).size > 0) {
+        if (files.length != 0 && FS.statSync(files[0]).size > 0) {
             clearInterval(timeouts);
             checkDatabaseExists();
             fileDrop('C:\\' + files[0], files[0])
