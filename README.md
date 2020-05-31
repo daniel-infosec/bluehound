@@ -4,7 +4,7 @@
 
 ## Problem Statement
 
-Red Teams and potentially attackers are using BloodHound asymmetrically to the supposed advantage it provides to Blue Team organizations. In my experience, this is due to the limited resources and knowledge of Blue Teams who treat Red Team tooling as contraband. To share the blame, Red Teams often say "just run BloodHound" without providing the training or resource necessary to make it easy for Blue Teams. This project aims to solve those problems by accomplishing the following.
+Red Teams and potentially attackers are using BloodHound asymmetrically to the supposed advantage it provides to Blue Teams. In my experience, this is due to the limited resources and knowledge of Blue Teams who treat Red Team tooling as contraband. To share the blame, Red Teams often say "just run BloodHound" without providing the training or resources necessary to make it easy for Blue Teams. This project aims to solve those problems by accomplishing the following:
 
 * Make it terribly easy to setup a BloodHound server and ingestor
 * Run ingestors on a scheduled basis and automatically ingest that data into the server
