@@ -8,5 +8,5 @@ username = "neo4j"
 password = "obiwankenobi"
 
 [collection_frequency]
-schedule = "* 1 * * *"
+schedule = "0 0 */1 * * *"
 
