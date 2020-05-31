@@ -9,7 +9,10 @@ Red Teams and potentially attackers are using BloodHound asymmetrically to the s
 * Make it terribly easy to setup a BloodHound server and ingestor
 * Run ingestors on a scheduled basis and automatically ingest that data into the server
 * Make it easy for Blue Teams to look for misconfigurations
-* Automatically look for new attack paths and push new paths as alerts to a SIEM (not yet implemented)
+
+### Planned Features
+* Automatically look for new attack paths and push new paths as alerts to a SIEM
+* Integrate with AD logs for hyper-accurate session data
 
 ## Instructions
 
