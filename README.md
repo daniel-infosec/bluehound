@@ -30,7 +30,7 @@ That's it. The server will now be automatically collecting data.
 
 ### DCSetup
 
-I know a lot of people are scared about running random code on their Domain Controllers. I tried my best to make this as simpel as possible and I copy-pasted the code and best practices from Microsoft. https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/manage-serviceaccounts.
+I know a lot of people are scared about running random code on their Domain Controllers. I tried my best to make this as simple as possible and I copy-pasted the code and best practices from Microsoft. https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/manage-serviceaccounts.
 
 Feel free to review the DCSetup script and compare.
 
@@ -41,6 +41,7 @@ The server setup script does the following:
 * Installs Docker
 * Installs Docker-compose
 * Setups a transparent docker network interface so the containers can communicate with the Domain
+* Configures the docker-compose file based on selected interface
 * Creates a gMSA (https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/manage-serviceaccounts)
 
 ## Frequency
@@ -55,14 +56,14 @@ I'm a big fan of @Cyb3rWard0g's ues of Jupyter notebooks for analysis. They're a
 
 https://medium.com/threat-hunters-forge/jupyter-notebooks-for-bloodhound-analytics-and-alternative-visualizations-9543c2df576a
 
-You can access the Jupyter notebook server by going to the URL provided in the docker-compose output.
+You can access the Jupyter notebook server by going to the URL provided in the docker-compose output. To get them to work, set the hostname to "neo4j_db" and set the username and password to the one's you specified in the config.toml file.
 
 ## Future Work
 
 * On first run, store all attack paths to DA and then generate alerts for new attack paths added
 * Add more nifty jupyter notebooks for analysis
 * Provide support for deploying this app in Azure
-* Make the output from the containers more user friendly
+* Make the output from docker-compose more user friendly
 * Provide support for running this project with vagrant instead of docker-compose
 
 ## Credits
