@@ -400,7 +400,7 @@ function getFile(timeout) {
         //console.log('Checking for: ', file);
        //console.log('Exists: ', fileExists);
 
-        if (files.length != 0 && fs.statSync(files).size > 0) {
+        if (files.length != 0 && FS.statSync(files).size > 0) {
             clearInterval(timeouts);
             checkDatabaseExists();
             fileDrop('C:\\' + files[0], files[0])
@@ -462,12 +462,12 @@ const schedule = config['collection_frequency']['schedule'];
 var count = 1;
 var driver;
 
-var cron = require('node-cron');
-
-cron.schedule(schedule, () => {
+var CronJob = require('cron').CronJob;
+var job = new CronJob(schedule, function() {
   console.log('Initiating scheduled data collection');
   collectData();
-});
+}, null, true, 'America/Los_Angeles');
+job.start();
 
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});  
