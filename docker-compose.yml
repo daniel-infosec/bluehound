@@ -33,8 +33,8 @@ services:
     security_opt:
       - credentialspec=file://bluehound_bloodhound01.json
     dns:
-      - "192.168.43.2"
-      - "8.8.8.8"
+    #Set by SetupServer.ps1 script. Can also set manually if you'd like
+replace
     user: "NT AUTHORITY\\SYSTEM"
     networks:
       - default
