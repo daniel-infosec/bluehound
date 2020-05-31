@@ -17,8 +17,9 @@ Red Teams and potentially attackers are using BloodHound asymmetrically to the s
 2. Copy the DCSetup script to a Domain Controller, update the script with the hostname of the server you'll be running BloodHound from, and run it.
 3. Run the SetupRSAT.ps1 script. This will install the necessary AD modules on the server.
 4. Run the ServerSetup.ps1 script. (This will force the server to reboot.)
-5. Run StartContainers.ps1 script.
-6. Download the latest BloodHound release on the target server and run it. Once the StartContainers script is done, you can login to BloodHound using "neo4j" as the username and "obiwankenobi" as the default password. These are customizable in the .\config\config.toml file.
+5. Run SetupDockerNetwork.ps1
+6. Run StartContainers.ps1 script.
+7. Download the latest BloodHound release on the target server and run it. Once the StartContainers script is done, you can login to BloodHound using "neo4j" as the username and "obiwankenobi" as the default password. These are customizable in the .\config\config.toml file.
 
 That's it. The server will now be automatically collecting data.
 
