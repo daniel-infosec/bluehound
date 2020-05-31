@@ -38,6 +38,7 @@ The server setup script does the following:
 * Installs Docker
 * Installs Docker-compose
 * Setups a transparent docker network interface so the containers can communicate with the Domain
+* Creates a gMSA (https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/manage-serviceaccounts)
 
 ## Frequency
 
