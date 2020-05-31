@@ -31,6 +31,6 @@ RUN npm init -y && \
 	npm install toml && \
 	npm install node-powershell && \
 	npm install underscore && \
-	npm install node-cron
+	npm install node
 
 #ENTRYPOINT ["node","c:\\data-collector\\dataingestor.js"]
