@@ -15,6 +15,18 @@ while($inList -eq $null) {
 }
 docker network create -d transparent -o com.docker.network.windowsshim.interface="$domainProfile" BHNet
 
+#Setup DNS in docker-compose
+$dnsaddresses = get-dnsclientserveraddress -interfacealias $domainProfile -addressfamily IPv4
+$dnsservers = ''
+foreach ($dnsserver in $dnsaddresses.ServerAddresses) {
+    $body = '      - "' + $dnsserver + '"' + "`r`n"
+    $dnsservers = $dnsservers + $body
+    #$dnsservers= -join($dnsservers,'`r`n','- "dnsserver"')
+}
+
+$configPath = $PSScriptRoot + "\docker-compose.yml"
+((get-content -path $configPath -raw) -replace "replace",$dnsservers.trimend()) | set-content -path $configPath
+
 # Create Credential Spec
 Import-Module ActiveDirectory
 Install-Module CredentialSpec
